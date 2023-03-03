@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Scene Writing Tool</title>
+	<style>
+body {
+  background-color: #8299B1;
+  font-family: "Open Sans", sans-serif;
+  font-size: medium;
+  justify-content: center;
+}
+
+h2 {
+  color: ivory;
+}
+
+label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+.textbox,
+.compiled {
+  display: block;
+  margin: 20px auto;
+  width: 70%;
+  height: 100px;
+  resize: none;
+  overflow-y: scroll;
+  font-family: "Times New Roman", serif;
+  font-size: large;
+  line-height: 1.5;
+  padding: 0.75em;
+  white-space: pre-wrap;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: ivory;
+}
+
+.notebox {
+  display: block;
+  margin: 20px auto;
+  width: 50%;
+  height: 100px;
+  resize: none;
+  overflow-y: scroll;
+  font-family: "Open Sans", sans-serif;
+  font-size: medium;
+  line-height: 1.5;
+  padding: 0.75em;
+  white-space: pre-wrap;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #ccff99;
+}
+
+.notebox[placeholder]:empty:before {
+  content: attr(placeholder);
+  color: #888;
+}
+
+.notebox:focus::placeholder {
+  opacity: 0;
+}
+
+.notebox:focus {
+  outline: none;
+  border-color: #008CBA;
+}
+
+button {
+  display: block;
+  margin: 20px auto;
+  padding: 10px;
+  font-size: medium;
+  background-color: #333333;
+  color: ivory;
+  border: 1px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#wordcount {
+  display: inline-block;
+  width: 70%;
+  margin: 20px auto;
+  font-size: medium;
+  text-align: center;
+  background-color: ivory;
+  color: #333333;
+  font-weight: bold;
+  padding: 5px;
+}
+	</style>
+	<script>
+function toggleText() {
+  var x = document.getElementById("expandable");
+  if (x.style.display === "none") {
+    x.style.display = "block";
+  } else {
+    x.style.display = "none";
+  }
+}
+
+		function compile() {
+			var goal = document.getElementById("goal").value;
+			var conflict = document.getElementById("conflict").value;
+			var outcome = document.getElementById("outcome").value;
+			var compiled = goal + "\n\n" + conflict + "\n\n" + outcome;
+			document.getElementById("compiled").innerHTML = compiled;
+
+            var words = compiled.match(/\S+/g).length;
+            document.getElementById("wordcount").innerHTML = "Word count: " + words;
+		}
+
+function copyText() {
+  var textbox = document.getElementById("compiled");
+  textbox.select();
+  document.execCommand("copy");
+}
+
+
+function clearAll() {
+  var textareas = document.getElementsByTagName("textarea");
+  for (var i = 0; i < textareas.length; i++) {
+    textareas[i].value = "";
+  }
+
+  var checkboxes = document.getElementsByTagName("input");
+  for (var i = 0; i < checkboxes.length; i++) {
+    if (checkboxes[i].type === "checkbox") {
+      checkboxes[i].checked = false;
+    }
+  }
+
+  document.getElementById("compiled").innerHTML = "";
+  document.getElementById("wordcount").innerHTML = "";
+}
+	</script>
+</head>
+<body>
+<center>
+<h2>Scene Writing Tool</h2>
+<p><b>"The scene is the basic building block of fiction. It is where the action happens, where characters interact, where the story is told." - James Scott Bell</b></p>
+<p>The Goal, Conflict, Outcome (GCO) method is a technique used by many writers to create effective scenes. Here's a breakdown of each element:</p>
+<p>Goal: This is what your character wants to achieve in the scene. It's essential to establish a clear goal early on, so the reader knows what the character is striving for.</p>
+<p>Conflict: Conflict is what prevents your character from achieving their goal. This can be anything that creates tension, such as another character's actions or an external obstacle. The conflict should be strong enough to challenge the character and create a sense of urgency.</p>
+<p>Outcome: This is the result of the conflict. It's essential to have a clear outcome for each scene, as it helps move the story forward and keeps the reader engaged.</p>
+<p>Using the GCO method can help you create scenes that are focused and impactful. It helps you establish clear objectives for your characters and ensures that each scene serves a purpose in the overall story. By incorporating conflict, you create tension and keep readers engaged, while the outcome provides a sense of resolution that moves the story forward.</p>
+<h2>Why this Writing Tool?</h2>
+<p>As a writers, we want to create emotionally compelling and engaging scenes that keep our readers invested in our stories.</p>
+<p>By breaking down our scenes into individual parts, we can better focus on developing each ingredient to an effective degree. This will help us create well-crafted scenes that, when combined, will keep readers engaged and invested in our characters, and the stories that surround them.</p>
+<p>Want to see an example of this method in action? <a href="#" onclick="toggleText()">CLICK HERE</a> to view (or hide) a sample scene.</p>
+<p>---</p>
+<div id="expandable" style="display:none;">
+<p><b>Goal: Evelyn wants to land her airship safely</b></p>
+<p>Evelyn tightened her grip on the steering wheel as she scanned the horizon for a safe place to land. The storm had taken her by surprise, and now she was flying blind through the turbulent clouds. Her only goal was to land her airship safely, no matter what it took.</p>
+<p><b>Conflict: But she is flying through a violent storm</b></p>
+<p>The winds howled around her, threatening to tear the ship apart with each gust. Rain pounded the windows like angry fists, making it nearly impossible to see. Evelyn's heart raced as lightning crackled in the sky, illuminating the chaos around her. She fought to keep the ship steady, but it was a losing battle. The airship was being tossed around like a leaf in a hurricane, and she was powerless to stop it.</p>
+<p><b>Outcome: She manages to land, but she does so in an unknown part of the land. She's relieved to be safe, but concerned about being lost ... and possibly in danger.</b></p>
+<p>With a jolt, the ship hit the ground. Evelyn held her breath as she waited for the impact to subside, then let out a sigh of relief when it finally did. She had landed the airship, but she wasn't out of danger yet. She looked around, taking in her surroundings. The storm had carried her far off course, and she had no idea where she was. The landscape was unfamiliar, and she had no way to communicate with anyone for help.</p>
+<p>Evelyn knew that she had to keep her wits about her if she wanted to survive.</p>
+<p>---</p>
+</div>
+
+<p>Are you ready? Let's dive in!</p>
+	<div>
+		<label for="goal"><b>Goal:</b></label>
+		<input type="checkbox" id="goal-checkbox">
+		<br>
+		<textarea id="goal" class="textbox"></textarea>
+		<br>
+		<textarea id="goal-notes" class="notebox" placeholder="What does your character want in this scene, and why is this important to them? Brainstorm here ..."></textarea>
+	</div>
+	<div>
+		<label for="conflict"><b>Conflict:</b></label>
+		<input type="checkbox" id="conflict-checkbox">
+		<br>
+		<textarea id="conflict" class="textbox"></textarea>
+		<br>
+		<textarea id="conflict-notes" class="notebox" placeholder="Who, or what, is acting as an obstacle to your character's goal? And how does this conflict play out? Brainstorm here ..."></textarea>
+	</div>
+	<div>
+		<label for="outcome"><b>Outcome:</b></label>
+		<input type="checkbox" id="outcome-checkbox">
+		<br>
+		<textarea id="outcome" class="textbox"></textarea>
+		<br>
+		<textarea id="outcome-notes" class="notebox" placeholder="Does your character accomplish their goal? Do they fail? Perhaps a mixture of both? Brainstorm here ..."></textarea>
+	</div>
+	<br>
+	<button onclick="compile()">Compile</button>
+	<div>
+		<label for="compiled"><b>Compiled Scene:</b></label>
+		<br>
+		<textarea id="compiled" class="compiled" readonly></textarea>
+<button onclick="copyText()">Copy Text</button>
+	</div>
+    <div id="wordcount"><b></b></div>
+<button onclick="clearAll()">Clear All</button>
+	<br>
+</center>
+</body>
+</html>
