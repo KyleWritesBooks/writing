@@ -101,6 +101,10 @@
   left: 0;
 }
 
+#button-container select {
+  max-width: 50px;
+}
+
 #button-container button {
   display: flex;
   justify-content: center;
@@ -122,7 +126,8 @@
 #fullscreen-toggle:hover,
 #save-button:hover,
 #clear-all:hover,
-#timer-button:hover {
+#timer-button:hover,
+#tts-button:hover {
   background-color: #111111;
   color: #eeeeee;
 }
@@ -150,7 +155,8 @@
 .dark-mode #fullscreen-toggle,
 .dark-mode #save-button,
 .dark-mode #clear-all,
-.dark-mode #timer-button {
+.dark-mode #timer-button,
+.dark-mode #tts-button {
   background-color: #111111;
   border-color: #eeeeee;
   color: #eeeeee;
@@ -162,7 +168,8 @@
 .dark-mode #fullscreen-toggle:hover,
 .dark-mode #save-button:hover,
 .dark-mode #clear-all:hover,
-.dark-mode #timer-button:hover {
+.dark-mode #timer-button:hover,
+.dark-mode #tts-button:hover {
   background-color: #eeeeee;
   color: #111111;
 }
@@ -201,6 +208,10 @@
   <button id="font-toggle" onclick="changeFont()">Aa</button>
   <button id="theme-toggle" onclick="darkMode()">&#9681;</button>
   <button id="fullscreen-toggle" onclick="openFullscreen();closeFullscreen();">&#10530;</button>
+<select id="voice-select">
+  <option value="">Select a Voice</option>
+</select>
+  <button id="tts-button" onclick="speak()">&#9738;</button>
   <button id="save-button" onclick="saveText();">&#10515;</button>
   <button id="clear-all" onclick="clearAll();">&#9851;</button>
   <button id="timer-button">Start</button>
@@ -372,6 +383,77 @@ function toggleTimer() {
 // Attach the toggleTimer function to the button's click event
 button.addEventListener('click', toggleTimer);
 
+// Initialize speech synthesis object
+var synth = window.speechSynthesis;
+var utterance = new SpeechSynthesisUtterance();
+
+// Function to populate voice-select dropdown with natural English voices
+function populateVoiceList() {
+  var voices = synth.getVoices();
+  var voiceSelect = document.getElementById('voice-select');
+  voiceSelect.innerHTML = '<option value="">Select a voice</option>';
+  for(var i = 0; i < voices.length ; i++) {
+    var voice = voices[i];
+    if (voice.lang.startsWith('en-') && voice.localService && voice.voiceURI.startsWith('urn:moz-tts') == false) {
+      var option = document.createElement('option');
+      option.textContent = voice.name + ' (' + voice.lang + ')';
+      option.setAttribute('value', voice.name);
+      voiceSelect.appendChild(option);
+    }
+  }
+  // Add natural English speaking voices
+  var naturalVoices = voices.filter(function(voice) {
+    return voice.lang.startsWith('en-') && voice.localService == false && voice.voiceURI.startsWith('urn:moz-tts') == false;
+  });
+  if (naturalVoices.length > 0) {
+    var optgroup = document.createElement('optgroup');
+    optgroup.label = 'Natural English Speaking Voices';
+    for (var i = 0; i < naturalVoices.length; i++) {
+      var option = document.createElement('option');
+      option.textContent = naturalVoices[i].name;
+      option.setAttribute('value', naturalVoices[i].name);
+      optgroup.appendChild(option);
+    }
+    voiceSelect.appendChild(optgroup);
+  }
+}
+
+// Call populateVoiceList function when voices are loaded
+synth.onvoiceschanged = populateVoiceList;
+
+var isPlaying = false;
+var clickDisabled = false;
+
+// Function to handle tts-button click event
+document.getElementById('tts-button').onclick = function() {
+if (!clickDisabled) {
+clickDisabled = true;
+setTimeout(function() {
+clickDisabled = false;
+}, 1000);
+if (isPlaying) {
+synth.cancel();
+isPlaying = false;
+document.getElementById('tts-button').innerHTML = '&#9738;'; // Set button text to default UTF icon
+} else {
+var voiceSelect = document.getElementById('voice-select');
+var selectedVoiceName = voiceSelect.value;
+if (selectedVoiceName) {
+var voices = synth.getVoices();
+for (var i = 0; i < voices.length; i++) {
+if (voices[i].name === selectedVoiceName) {
+utterance.voice = voices[i];
+break;
+}
+}
+utterance.text = document.getElementById('text-area').value;
+synth.speak(utterance);
+isPlaying = true;
+document.getElementById('tts-button').innerHTML = 'Stop'; // Set button text to 'Stop' while speech is playing
+}
+}
+}
+};
 
 </script>
   </body>
