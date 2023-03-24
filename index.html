@@ -389,37 +389,44 @@ var utterance = new SpeechSynthesisUtterance();
 
 // Function to populate voice-select dropdown with natural English voices
 function populateVoiceList() {
-  var voices = synth.getVoices();
-  var voiceSelect = document.getElementById('voice-select');
-  voiceSelect.innerHTML = '<option value="">Select a voice</option>';
-  for(var i = 0; i < voices.length ; i++) {
-    var voice = voices[i];
-    if (voice.lang.startsWith('en-') && voice.localService && voice.voiceURI.startsWith('urn:moz-tts') == false) {
-      var option = document.createElement('option');
-      option.textContent = voice.name + ' (' + voice.lang + ')';
-      option.setAttribute('value', voice.name);
-      voiceSelect.appendChild(option);
-    }
-  }
-  // Add natural English speaking voices
-  var naturalVoices = voices.filter(function(voice) {
-    return voice.lang.startsWith('en-') && voice.localService == false && voice.voiceURI.startsWith('urn:moz-tts') == false;
-  });
-  if (naturalVoices.length > 0) {
-    var optgroup = document.createElement('optgroup');
-    optgroup.label = 'Natural English Speaking Voices';
-    for (var i = 0; i < naturalVoices.length; i++) {
-      var option = document.createElement('option');
-      option.textContent = naturalVoices[i].name;
-      option.setAttribute('value', naturalVoices[i].name);
-      optgroup.appendChild(option);
-    }
-    voiceSelect.appendChild(optgroup);
-  }
+var voices = synth.getVoices();
+var voiceSelect = document.getElementById('voice-select');
+voiceSelect.innerHTML = '<option value="">Select a voice</option>';
+for(var i = 0; i < voices.length ; i++) {
+var voice = voices[i];
+if (voice.lang.startsWith('en-') && voice.localService && voice.voiceURI.startsWith('urn:moz-tts') == false) {
+var option = document.createElement('option');
+option.textContent = voice.name + ' (' + voice.lang + ')';
+option.setAttribute('value', voice.name);
+voiceSelect.appendChild(option);
+}
+}
+// Add natural English speaking voices
+var naturalVoices = voices.filter(function(voice) {
+return voice.lang.startsWith('en-') && voice.localService == false && voice.voiceURI.startsWith('urn:moz-tts') == false;
+});
+if (naturalVoices.length > 0) {
+var optgroup = document.createElement('optgroup');
+optgroup.label = 'Natural English Speaking Voices';
+for (var i = 0; i < naturalVoices.length; i++) {
+var option = document.createElement('option');
+option.textContent = naturalVoices[i].name;
+option.setAttribute('value', naturalVoices[i].name);
+optgroup.appendChild(option);
+}
+voiceSelect.appendChild(optgroup);
+}
 }
 
 // Call populateVoiceList function when voices are loaded
+if (synth.onvoiceschanged !== undefined) {
 synth.onvoiceschanged = populateVoiceList;
+} else {
+// Workaround for Safari
+setTimeout(function() {
+populateVoiceList();
+}, 100);
+}
 
 var isPlaying = false;
 var clickDisabled = false;
@@ -434,7 +441,7 @@ clickDisabled = false;
 if (isPlaying) {
 synth.cancel();
 isPlaying = false;
-document.getElementById('tts-button').innerHTML = '&#9738;'; // Set button text to default UTF icon
+document.getElementById('tts-button').innerHTML = '☊'; // Set button text to default UTF icon
 } else {
 var voiceSelect = document.getElementById('voice-select');
 var selectedVoiceName = voiceSelect.value;
