@@ -454,6 +454,7 @@ break;
 }
 }
 utterance.text = document.getElementById('text-area').value;
+utterance.rate = 0.9;
 synth.speak(utterance);
 isPlaying = true;
 document.getElementById('tts-button').innerHTML = 'Stop'; // Set button text to 'Stop' while speech is playing
