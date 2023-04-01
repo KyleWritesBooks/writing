@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Progress Machine</title>
+	<style>
+html, body {
+   height: 100%;
+   margin: 0;
+}
+
+body {
+  background-color: gainsboro;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+#image {
+  position: relative;
+}
+
+@font-face {
+  font-family: 'Gruppo';
+  src: url('../../writing/Gruppo-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('../../writing/Raleway-Regular.ttf') format('truetype');
+}
+
+#inputs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inputs-container label, #inputs-container select, #inputs-container input[type="number"], #inputs-container button {
+  margin: 0 10px;
+}
+
+input[type="number"], select {
+  font-size: 16px;
+}
+
+#percentage-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 83px;
+  height: 83px;
+  position: absolute;
+  top: 21px;
+  left: 38px;
+}
+
+#message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: 200px;
+  left: 36px;
+}
+
+#percentage {
+  font-size: 32px;
+  font-weight: bold;
+  font-family: 'Gruppo', sans-serif;
+  color: navy;
+}
+
+#message {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: 'Gruppo', sans-serif;
+  text-align: center;
+  color: black;
+}
+
+</style>
+</head>
+<body>
+<br>
+<br>
+	<h2>Progress Machine</h2>
+	<div id="inputs-container">
+  <label for="goal">Wordcount Goal:</label>
+<select id="goal">
+  <option value="250">250</option>
+  <option value="500">500</option>
+  <option value="1000">1,000</option>
+  <option value="2000">2,000</option>
+  <option value="5000">5,000</option>
+  <option value="10000">10,000</option>
+  <option value="25000">25,000</option>
+  <option value="50000">50,000</option>
+  <option value="75000">75,000</option>
+  <option value="90000">90,000</option>
+</select>
+
+  <label for="wordcount">Current Wordcount:</label>
+  <input type="number" id="wordcount" name="wordcount" min="0" max="90000" maxlength="5">
+  <button id="reset-btn">Reset</button>
+</div>
+<div id="image">
+  <img src="../../writing/ProgressMachine.png">
+  <div id="percentage-container">
+    <div id="percentage"></div>
+  </div>
+  <div id="message-container">
+    <div id="message"></div>
+  </div>
+</div>
+<script>
+const goalSelect = document.getElementById("goal");
+const currentInput = document.getElementById("wordcount");
+const percentageDiv = document.getElementById("percentage");
+const messageDiv = document.getElementById("message");
+
+function calculatePercentage() {
+  let goal = Number.parseInt(goalSelect.value);
+  let current = Number.parseInt(document.getElementById("wordcount").value);
+  let percentage = Math.round((current / goal) * 100);
+  let message = "";
+
+  if (isNaN(goal) || isNaN(current)) {
+    percentageDiv.innerHTML = "";
+    messageDiv.innerHTML = "";
+    return;
+  }
+
+  if (percentage > 100) {
+    percentage = 100;
+  }
+
+  percentageDiv.innerHTML = `${percentage}%`;
+
+  switch (true) {
+    case percentage < 25:
+      message = "Crafting<br>foundation ...";
+      break;
+    case percentage < 50:
+      message = "Complexity<br>emerging ...";
+      break;
+    case percentage < 75:
+      message = "Momentum<br>increasing ...";
+      break;
+    case percentage < 100:
+      message = "Exceptional<br>output ...";
+      break;
+    default:
+      message = "Creation<br>complete.";
+  }
+
+  messageDiv.innerHTML = `<center>${message}</center>`;
+}
+
+goalSelect.addEventListener("change", calculatePercentage);
+document.getElementById("wordcount").addEventListener("input", calculatePercentage);
+
+document.getElementById("reset-btn").addEventListener("click", function() {
+  goalSelect.value = "250";
+  currentInput.value = "";
+  calculatePercentage();
+});
+
+</script>
+
+</body>
+</html>
