@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Progress Machine</title>
+	<style>
+html, body {
+   height: 100%;
+   margin: 0;
+}
+
+body {
+  background-color: gainsboro;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Raleway', sans-serif;
+  font-size: 16px;
+}
+
+h2 {
+  font-size: 24px;
+}
+
+#image {
+  position: relative;
+}
+
+@font-face {
+  font-family: 'Gruppo';
+  src: url('../../writing/Gruppo-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'Raleway';
+  src: url('../../writing/Raleway-Regular.ttf') format('truetype');
+}
+
+#inputs-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#inputs-container label, #inputs-container select, #inputs-container input[type="number"], #inputs-container button {
+  margin: 0 10px;
+}
+
+input[type="number"], select {
+  font-size: 16px;
+}
+
+#percentage-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 83px;
+  height: 83px;
+  position: absolute;
+  top: 21px;
+  left: 38px;
+}
+
+#message-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 120px;
+  height: 120px;
+  position: absolute;
+  top: 200px;
+  left: 36px;
+}
+
+#percentage {
+  font-size: 32px;
+  font-weight: bold;
+  font-family: 'Gruppo', sans-serif;
+  color: navy;
+}
+
+#message {
+  font-size: 18px;
+  font-weight: bold;
+  font-family: 'Gruppo', sans-serif;
+  text-align: center;
+  color: black;
+}
+
+#plot-point-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 148px;
+  height: 148px;
+  position: absolute;
+  top: 214px;
+  left: 414px;
+}
+
+#plot-point-container > div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+}
+
+</style>
+</head>
+<body>
+<br>
+	<h2>Progress Machine</h2>
+	<div id="inputs-container">
+  <label for="goal">Wordcount Goal:</label>
+<select id="goal">
+  <option value="250">250</option>
+  <option value="500">500</option>
+  <option value="1000">1,000</option>
+  <option value="2000">2,000</option>
+  <option value="5000">5,000</option>
+  <option value="10000">10,000</option>
+  <option value="25000">25,000</option>
+  <option value="50000">50,000</option>
+  <option value="75000">75,000</option>
+  <option value="90000">90,000</option>
+</select>
+
+  <label for="wordcount">Current Wordcount:</label>
+  <input type="number" id="wordcount" name="wordcount" min="0" max="90000" maxlength="5">
+  <button id="reset-btn">Reset</button>
+<button id="idea-btn">Generate</button>
+</div>
+<br>
+<div id="image">
+  <img src="../../writing/ProgressMachine-new.png">
+  <div id="percentage-container">
+    <div id="percentage"></div>
+  </div>
+  <div id="message-container">
+    <div id="message"></div>
+  </div>
+<div id="plot-point-container"></div>
+</div>
+<script>
+const goalSelect = document.getElementById("goal");
+const currentInput = document.getElementById("wordcount");
+const percentageDiv = document.getElementById("percentage");
+const messageDiv = document.getElementById("message");
+
+function calculatePercentage() {
+  let goal = Number.parseInt(goalSelect.value);
+  let current = Number.parseInt(document.getElementById("wordcount").value);
+  let percentage = Math.round((current / goal) * 100);
+  let message = "";
+
+  if (isNaN(goal) || isNaN(current)) {
+    percentageDiv.innerHTML = "";
+    messageDiv.innerHTML = "";
+    return;
+  }
+
+  if (percentage > 100) {
+    percentage = 100;
+  }
+
+  percentageDiv.innerHTML = `${percentage}%`;
+
+  switch (true) {
+    case percentage < 25:
+      message = "Crafting<br>foundation ...";
+      break;
+    case percentage < 50:
+      message = "Complexity<br>emerging ...";
+      break;
+    case percentage < 75:
+      message = "Momentum<br>increasing ...";
+      break;
+    case percentage < 100:
+      message = "Exceptional<br>output ...";
+      break;
+    default:
+      message = "Creation<br>complete.";
+  }
+
+  messageDiv.innerHTML = `<center>${message}</center>`;
+}
+
+goalSelect.addEventListener("change", calculatePercentage);
+document.getElementById("wordcount").addEventListener("input", calculatePercentage);
+
+document.getElementById("reset-btn").addEventListener("click", function() {
+  goalSelect.value = "250";
+  currentInput.value = "";
+  calculatePercentage();
+document.getElementById("plot-point-container").innerHTML = "";
+});
+
+const plotPoints = ["Love at first sight", "A mysterious stranger arrives", "A deadly virus outbreak occurs", "A long-lost relative appears", "A case of mistaken identity", "A dark family secret revealed", "A natural disaster strikes", "A political scandal erupts", "A forbidden love affair", "A haunted house discovered", "A life-changing accident occurs", "A famous person goes missing", "A shocking betrayal revealed", "A treasure map discovered", "A world-changing invention created", "A dangerous cult emerges", "A high-stakes heist planned", "A supernatural power awakens", "A missing person found", "A time-traveling adventure begins", "A new form of government instituted", "A financial crisis unfolds", "A trip to outer space", "A custody battle ensues", "A legal case goes viral", "A group of rebels rise up", "A major sports upset", "A secret society uncovered", "A hero saves the day", "A cult classic remake announced", "A big family reunion", "A stolen identity discovered", "A forbidden magic practiced", "A romantic getaway turns sour", "A courtroom drama unfolds", "A celebrity scandal breaks", "A dangerous mission assigned", "A new scientific breakthrough", "A magical creature discovered", "A mission to Mars", "A drug bust takes place", "A wrongful conviction overturned", "A time capsule unearthed", "A deadly curse unleashed", "A terrorist attack foiled", "A shocking confession made", "A supernatural threat emerges", "A historical event reenacted", "A star-crossed love affair", "A major scientific discovery", "A battle for survival ensues", "A whistleblower speaks out", "A new form of entertainment", "A corporate takeover attempt", "A miraculous medical recovery", "A rival gang emerges", "A groundbreaking archaeological find", "A detective solves a case", "A music icon's comeback", "A cyber attack threatens security", "A tragic accident occurs", "A great historical war retold", "A robot uprising takes place", "A hidden treasure discovered", "A race against time", "A family feud escalates", "A young prodigy's journey", "A city under siege", "A dramatic rescue mission", "A forbidden experiment conducted", "A tragic love triangle", "A power-hungry villain emerges", "A shocking family revelation", "A dystopian world explored", "A magical realm discovered", "A tale of revenge", "A technological malfunction occurs", "A devastating natural disaster", "A mysterious illness strikes", "A historic landmark destroyed", "A romantic comedy ensues", "A challenging riddle solved", "A family-owned business struggles", "A celebrity charity scandal", "A supernatural force intervenes", "A life-altering decision made", "A major political figure dies", "A dangerous game played", "A dramatic prison escape", "A corrupt government exposed", "A successful business venture", "A shocking twist revealed", "A supernatural being summoned", "A dramatic car chase", "A legendary creature hunted", "A forbidden love revealed", "A mysterious disappearance investigated", "A supernatural battle ensues", "A historical figure brought back", "A family torn apart", "A stranded group fights to survive", "A forbidden artifact discovered", "A sibling rivalry turns deadly", "A stranger poses a threat", "A freak accident changes everything", "A technology takeover begins", "A dark past catches up", "A new species is discovered", "A mentor becomes an enemy", "A hidden society rules all", "A dream vacation turns deadly", "A curse from the past", "A secret experiment goes wrong", "A dark force takes over", "A childhood memory resurfaces", "A corrupt cop is exposed", "A portal to another world", "A surprise inheritance received", "A quest for immortality", "A spy mission goes wrong", "A mistaken prophecy alters fate", "A billionaire's mysterious death", "A tragic misunderstanding occurs", "A battle between good and evil", "A forbidden knowledge revealed", "A rescue mission in a warzone", "A forgotten city discovered", "A journey to find oneself", "A secret weapon is revealed", "A freak storm causes chaos", "A missing piece found", "A deadly game of cat and mouse", "A twisted experiment is conducted", "A forbidden ritual performed", "A psychological thriller unfolds", "A dangerous virus spreads rapidly", "A technological revolution changes society", "A deal with the devil", "A haunted object possessed", "A dangerous escape plan", "A mistaken prophecy fulfilled", "A controversial invention revealed", "A deadly creature on the loose", "A shocking revelation uncovered", "A battle for the throne", "A secret government project exposed", "A dangerous love triangle", "A tragic hero's downfall", "A deadly conspiracy uncovered", "A forbidden portal opened", "A family's legacy at stake", "A powerful artifact sought after", "A deadly weapon created", "A dangerous rogue agent", "A forbidden sacrifice made", "A long-awaited reunion", "A city in chaos", "A shocking betrayal from within", "A forbidden fruit tasted", "A legendary hero resurrected", "A life-saving discovery made", "A tragic sacrifice", "A dark prophecy comes true", "A dangerous cult leader", "A supernatural war between factions", "A life-changing decision made in haste", "A deadly game of survival", "A tragic hero's redemption", "A lost civilization rediscovered", "A supernatural curse broken", "A deadly virus mutation", "A tragic accident covered up", "A dangerous black market trade", "A forbidden romance exposed", "A deadly weapon stolen", "A family's darkest secret revealed", "A supernatural possession", "A dystopian society revolted against"];
+
+function generatePlotPoint() {
+  // clear previous plot points
+  const plotPointContainer = document.getElementById("plot-point-container");
+  plotPointContainer.innerHTML = "";
+
+  // get a random plot point from the array
+  const plotPoint = plotPoints[Math.floor(Math.random() * plotPoints.length)];
+  
+  // display the plot point in the plot point container
+  const plotPointDiv = document.createElement("div");
+  plotPointDiv.innerHTML = plotPoint;
+  plotPointContainer.appendChild(plotPointDiv);
+}
+
+const generateButton = document.getElementById("idea-btn");
+generateButton.addEventListener("click", generatePlotPoint);
+
+
+</script>
+
+</body>
+</html>
